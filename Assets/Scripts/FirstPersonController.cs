@@ -31,6 +31,7 @@ namespace StarterAssets {
 		[Header("Player Grounded")]
 		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 		public bool grounded = true;
+		private bool lastGrounded = true;
 		[Tooltip("Useful for rough ground")]
 		public float groundedOffset = -0.14f;
 		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
@@ -98,9 +99,23 @@ namespace StarterAssets {
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
 			grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
-            // if (grounded) {
-            //     animator.SetBool("IsJumping", false);
-            // }
+            if (lastGrounded != grounded) {
+                if (grounded) {
+                    // Debug.Log("not jumping...");
+                    // animator.SetBool("IsJumping", false);
+                }
+
+                if (!grounded) {
+                    // Debug.Log("jumping...");
+                    // animator.SetBool("IsJumping", true);
+                }
+
+                // animator.SetBool("IsJumping", !grounded);
+            }
+
+            lastGrounded = grounded;
+            // animator.SetBool("IsJumping", !grounded);
+            // animator.ResetTrigger("StandingJump");
 		}
 
 		private void CameraRotation () {
@@ -178,10 +193,8 @@ namespace StarterAssets {
 				// Jump
 				if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					_verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+					// _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 				}
-
-                animator.SetBool("IsJumping", true);
 
 				// jump timeout
 				if (_jumpTimeoutDelta >= 0.0f) {

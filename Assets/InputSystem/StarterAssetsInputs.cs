@@ -32,10 +32,11 @@ namespace StarterAssets {
 		}
 
 		public void OnJump(InputValue value) {
-            Debug.Log("jump: " + value.isPressed);
+            // Debug.Log("jump: " + value.isPressed);
 			jump = value.isPressed;
             // animator.SetBool("IsJumping", value.isPressed);
-            // animator.SetBool("IsJumping", true);
+            animator.SetBool("IsJumping", true);
+            // animator.SetTrigger("StandingJump");
 		}
 
 		public void OnSprint(InputValue value) {

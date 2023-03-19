@@ -743,6 +743,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1456151406 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5014025093650001051, guid: 57f0780a56037a1448a7fcf95cc37d04,
+    type: 3}
+  m_PrefabInstance: {fileID: 2100814381}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1498318879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,7 +1741,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 0a9a525d152f7cd4b8f8a96d71bf865f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1756,6 +1762,21 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1.02, z: 0}
+--- !u!114 &2100814386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100814383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ef213c55c9034e4582a16c0dd53d335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObj: {fileID: 1456151406}
+  parent: {fileID: 1498318885}
+  initFootY: 0
 --- !u!1001 &2120752286
 PrefabInstance:
   m_ObjectHideFlags: 0
