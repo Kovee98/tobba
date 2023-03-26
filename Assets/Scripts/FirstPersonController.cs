@@ -178,6 +178,20 @@ namespace StarterAssets {
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+
+            // set jogging/sprinting animation parameters
+            if (_speed > 0f) {
+                if (_input.sprint) {
+                    animator.SetBool("IsWalking", false);
+                    animator.SetBool("IsSprinting", true);
+                } else {
+                    animator.SetBool("IsWalking", true);
+                    animator.SetBool("IsSprinting", false);
+                }
+            } else {
+                animator.SetBool("IsWalking", false);
+                animator.SetBool("IsSprinting", false);
+            }
 		}
 
 		private void JumpAndGravity () {
@@ -236,5 +250,18 @@ namespace StarterAssets {
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
 		}
+
+        /*
+            Animation events
+        */
+        void OnAnimatorMove () {}
+
+        /* standing jump */
+        public void OnJumpEvent () {
+            _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+        public void OnLand () {
+            animator.SetBool("IsJumping", false);
+        }
 	}
 }
