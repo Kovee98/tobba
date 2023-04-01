@@ -167,7 +167,8 @@ namespace StarterAssets {
 			}
 
 			// normalise input direction
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            Vector3 inputMove = new Vector3(_input.move.x, 0.0f, _input.move.y);
+			Vector3 inputDirection = inputMove.normalized;
 
 			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is a move input rotate player when the player is moving
@@ -179,18 +180,23 @@ namespace StarterAssets {
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            // set jogging/sprinting animation parameters
+            // set running/sprinting animation parameters
+            animator.SetBool("IsRunning", false);
+            animator.SetBool("IsRunningLeft", false);
+            animator.SetBool("IsRunningRight", false);
+            animator.SetBool("IsRunningBack", false);
+            animator.SetBool("IsSprinting", false);
+
             if (_speed > 0f) {
                 if (_input.sprint) {
-                    animator.SetBool("IsWalking", false);
                     animator.SetBool("IsSprinting", true);
                 } else {
-                    animator.SetBool("IsWalking", true);
-                    animator.SetBool("IsSprinting", false);
+                    // set running/strifing animation parameters
+                    if (inputMove.z > 0 && inputMove.x == 0) animator.SetBool("IsRunning", true);
+                    else if (inputMove.z < 0) animator.SetBool("IsRunningBack", true);
+                    else if (inputMove.x < 0) animator.SetBool("IsRunningLeft", true);
+                    else if (inputMove.x > 0) animator.SetBool("IsRunningRight", true);
                 }
-            } else {
-                animator.SetBool("IsWalking", false);
-                animator.SetBool("IsSprinting", false);
             }
 		}
 
@@ -260,7 +266,7 @@ namespace StarterAssets {
         public void OnJumpEvent () {
             _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        public void OnLand () {
+        public void OnLandEvent () {
             animator.SetBool("IsJumping", false);
         }
 	}
