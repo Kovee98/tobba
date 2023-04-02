@@ -52,30 +52,30 @@
                 },
                 {
                     "name": "Primary",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "41cc6b81-cc3b-4a7a-921a-377fd6a1f041",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Secondary",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "a5369c72-d681-4ba7-84c6-a809552d34bd",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Legendary",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "238fe6bb-1c9f-48d7-9ff2-849f6df3dff2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

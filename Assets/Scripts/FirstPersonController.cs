@@ -49,6 +49,13 @@ namespace StarterAssets {
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float bottomClamp = -80.0f;
 
+        // actions
+        public string primary = "Standing1HAttack01";
+        public string secondary = "Standing1HAttack02";
+        public string legendary = "Standing2HAttack01";
+        public float castTimeout = 0.1f;
+        private float _castTimeoutDelta = 0.1f;
+
 		// cinemachine
 		private float _cinemachineTargetPitch;
 
@@ -84,12 +91,14 @@ namespace StarterAssets {
 			// reset our timeouts on start
 			_jumpTimeoutDelta = jumpTimeout;
 			_fallTimeoutDelta = fallTimeout;
+			_castTimeoutDelta = castTimeout;
 		}
 
 		private void Update () {
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+            Action();
 		}
 
 		private void LateUpdate () {
@@ -242,6 +251,35 @@ namespace StarterAssets {
 				_verticalVelocity += gravity * Time.deltaTime;
 			}
 		}
+
+        public bool isCasting = false;
+        private void Action () {
+            if (!isCasting && (_input.primary || _input.secondary)) {
+                isCasting = true;
+			    _castTimeoutDelta = castTimeout;
+
+                if (_input.primary && !_input.secondary) {
+                    // Debug.Log("primary...");
+                    animator.Play(primary, 0, 0f);
+                } else if (_input.secondary && !_input.primary) {
+                    // Debug.Log("secondary...");
+                    animator.Play(secondary, 0, 0f);
+                } else if (_input.primary && _input.secondary) {
+                    // Debug.Log("legendary...");
+                    animator.Play(legendary, 0, 0f);
+                }
+            }
+
+            if (_castTimeoutDelta >= 0.0f) {
+                _castTimeoutDelta -= Time.deltaTime;
+            } else {
+                // isCasting = false;
+            }
+
+            if (_castTimeoutDelta <= 0.0f && !_input.primary && !_input.secondary) {
+                isCasting = false;
+            }
+        }
 
 		private static float ClampAngle (float lfAngle, float lfMin, float lfMax) {
 			if (lfAngle < -360f) lfAngle += 360f;

@@ -44,17 +44,14 @@ namespace StarterAssets {
 		}
 
 		public void OnPrimary(InputValue value) {
-            Debug.Log("primary...");
 			primary = value.isPressed;
 		}
 
 		public void OnSecondary(InputValue value) {
-            Debug.Log("secondary...");
 			secondary = value.isPressed;
 		}
 
 		public void OnLegendary(InputValue value) {
-            Debug.Log("legendary...");
 			legendary = value.isPressed;
 		}
 
