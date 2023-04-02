@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 namespace StarterAssets {
 	public class StarterAssetsInputs : MonoBehaviour {
 		[Header("Character Input Values")]
-        public Animator animator;
 		public Vector2 move;
 		public Vector2 look;
 		public bool jump;
@@ -33,7 +32,6 @@ namespace StarterAssets {
 
 		public void OnJump(InputValue value) {
 			jump = value.isPressed;
-            animator.SetBool("IsJumping", true);
 		}
 
 		public void OnSprint(InputValue value) {

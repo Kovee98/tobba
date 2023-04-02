@@ -1022,8 +1022,9 @@ MonoBehaviour:
   jumpHeight: 2
   gravity: -30
   jumpTimeout: 0.1
-  fallTimeout: 0.15
+  fallTimeout: 0.4
   grounded: 1
+  landingOffset: 0.25
   groundedOffset: -0.45
   groundedRadius: 0.5
   groundLayers:
@@ -1102,6 +1103,7 @@ MonoBehaviour:
   primary: 0
   secondary: 0
   legendary: 0
+  jumpOffset: 0.275
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -1615,10 +1617,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45a678c772e0ebc4d8ef470a584735ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 453705483}
-  initPos: {x: 0, y: 0, z: 0}
-  initTargetPos: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1590404711
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,8 @@ namespace StarterAssets {
 		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
 		public bool grounded = true;
 		private bool lastGrounded = true;
+        public float jumpOffset = 0.275f;
+        public float landingOffset = 0.25f;
 		[Tooltip("Useful for rough ground")]
 		public float groundedOffset = -0.14f;
 		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
@@ -99,23 +101,19 @@ namespace StarterAssets {
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
 			grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
-            if (lastGrounded != grounded) {
-                if (grounded) {
-                    // Debug.Log("not jumping...");
-                    // animator.SetBool("IsJumping", false);
-                }
+            // set jumping/falling animation parameters
+            animator.SetBool("IsGrounded", grounded);
 
-                if (!grounded) {
-                    // Debug.Log("jumping...");
-                    // animator.SetBool("IsJumping", true);
-                }
+            if (grounded) {
+                animator.SetBool("IsFalling", false);
+            }
 
-                // animator.SetBool("IsJumping", !grounded);
+            // just landed
+            if (grounded && !lastGrounded) {
+                animator.Play("Jumping.FallingToLanding", 0, landingOffset);
             }
 
             lastGrounded = grounded;
-            // animator.SetBool("IsJumping", !grounded);
-            // animator.ResetTrigger("StandingJump");
 		}
 
 		private void CameraRotation () {
@@ -213,7 +211,11 @@ namespace StarterAssets {
 				// Jump
 				if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					// _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+					_verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+                    // play jump animation
+                    // animator.Play("Jumping.StandingJump", 0, 0.275f);
+                    animator.Play("Jumping.StandingJumpCaster", 0, jumpOffset);
 				}
 
 				// jump timeout
@@ -227,7 +229,9 @@ namespace StarterAssets {
 				// fall timeout
 				if (_fallTimeoutDelta >= 0.0f) {
 					_fallTimeoutDelta -= Time.deltaTime;
-				}
+				} else {
+                    animator.SetBool("IsFalling", true);
+                }
 
 				// if we are not grounded, do not jump
 				_input.jump = false;
@@ -261,13 +265,5 @@ namespace StarterAssets {
             Animation events
         */
         void OnAnimatorMove () {}
-
-        /* standing jump */
-        public void OnJumpEvent () {
-            _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-        public void OnLandEvent () {
-            animator.SetBool("IsJumping", false);
-        }
 	}
 }
