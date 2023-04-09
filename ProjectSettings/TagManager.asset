@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Collide
+  - Block
   layers:
   - Default
   - TransparentFX
@@ -13,12 +14,12 @@ TagManager:
   - 
   - Water
   - UI
+  - 
+  - 
   - Character
   - Ground
-  - TempCast
-  - Walkable
   - 
-  - 
+  - Buildable
   - 
   - 
   - 

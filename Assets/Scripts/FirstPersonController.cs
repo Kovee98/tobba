@@ -60,6 +60,12 @@ public class FirstPersonController : MonoBehaviour {
     private PlayerInput _playerInput;
     private CharacterController _controller;
     private GameObject _mainCamera;
+    public GameObject leftHand;
+    public GameObject rightHand;
+
+    private Ray screenRay;
+    private Ray castRay;
+    private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // center of the screen
 
     private void Awake () {
         // get a reference to our main camera
@@ -75,12 +81,19 @@ public class FirstPersonController : MonoBehaviour {
         // reset our timeouts on start
         _castTimeoutDelta = castTimeout;
         _castCooldownDelta = castCooldown;
+
+        // actual Ray
+        screenRay = Camera.main.ViewportPointToRay(rayOrigin);
+        castRay = new Ray(leftHand.transform.position, (Vector3.zero - leftHand.transform.position).normalized);
     }
 
     private void Update () {
         Gravity();
         Movement();
         Action();
+
+        Debug.DrawRay(screenRay.origin, screenRay.direction * rayLength, Color.blue);
+        Debug.DrawRay(castRay.origin, castRay.direction * rayLength, Color.green);
     }
 
     private void LateUpdate () {
@@ -245,6 +258,47 @@ public class FirstPersonController : MonoBehaviour {
     public void FootL () {}
     public void Land () {}
     public void Hit () {}
+
+    public float rayLength = 500f;
+    private Vector3 castOrigin;
+    private Vector3 castDest;
+    private float tolerance = 0.01f;
+    public void Attack (string side) {
+
+        // ray from center of camera
+        screenRay = Camera.main.ViewportPointToRay(rayOrigin);
+
+        RaycastHit hit;
+        // our Ray intersected a collider
+        if (Physics.Raycast(screenRay, out hit, rayLength)) {
+            if (hit.transform.gameObject.tag == "Block") {
+                // determine which hand to use
+                GameObject hand = leftHand;
+                if (side == "right") hand = rightHand;
+                Vector3 castDir = (hit.point - hand.transform.position).normalized;
+                castRay = new Ray(hand.transform.position, castDir);
+            }
+        }
+    }
+
+    /* snippet for determining which side of the cube we hit (needs to be figured out when ) */
+    private Vector3 GetCubeCollisionSide (Vector3 hitPoint, GameObject hitObj) {
+        Vector3 objCenter = hitObj.transform.position;
+        Vector3 objScale = hitObj.transform.localScale;
+        Vector3 diff = hitPoint - objCenter;
+
+        Vector3 newObjPos = objCenter;
+        if ((diff.x + tolerance) >= (objScale.x / 2)) newObjPos.x = objCenter.x + objScale.x;
+        else if ((diff.x - tolerance) <= -(objScale.x / 2)) newObjPos.x = objCenter.x - objScale.x;
+        else if ((diff.z + tolerance) >= (objScale.z / 2)) newObjPos.z = objCenter.z + objScale.z;
+        else if ((diff.z - tolerance) <= -(objScale.z / 2)) newObjPos.z = objCenter.z - objScale.z;
+        else if ((diff.y + tolerance) >= (objScale.y / 2)) newObjPos.y = objCenter.y + objScale.y;
+        else if ((diff.y - tolerance) <= -(objScale.y / 2)) newObjPos.y = objCenter.y - objScale.y;
+
+        Debug.Log("newObjPos: " + newObjPos);
+
+        return newObjPos;
+    }
 
     public void AttackPrimary () {
         Debug.Log("Attack primary...");
